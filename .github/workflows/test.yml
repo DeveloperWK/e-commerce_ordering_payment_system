@@ -8,7 +8,8 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-
+    env:
+      DATABASE_URL: postgresql://test:test@localhost:5432/test_db
     services:
       postgres:
         image: postgres:15
@@ -43,11 +44,10 @@ jobs:
 
       - name: Run tests
         run: pnpm test
-
+      - name: Prisma Deploy
       - run: pnpm prisma migrate deploy
 
-        env:
-          DATABASE_URL: postgresql://test:test@localhost:5432/test_db
-      - run: pnpm test
+
+
         
 
