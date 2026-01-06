@@ -1,0 +1,13 @@
+model Users {
+  userId       String      @id @default(cuid())
+  name         String
+  email        String   @unique
+  phone_number String   @unique
+  password     String
+  role         String @default("customer")
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+
+  orders   Orders[]
+  payments Payments[]
+}

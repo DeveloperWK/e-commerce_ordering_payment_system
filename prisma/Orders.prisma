@@ -1,0 +1,12 @@
+model Orders {
+    orderId      String      @id @default(cuid())
+    user_id      String
+    total_amount Float
+    status       String
+    created_at   DateTime @default(now())
+    updated_at   DateTime @updatedAt
+
+    user       Users        @relation(fields: [user_id], references: [userId])
+    orderItems OrderItems[]
+    payments   Payments[]
+}

@@ -1,0 +1,14 @@
+model Payments {
+    paymentId      String      @id @default(cuid())
+    order_id       String
+    user_id        String?
+    provider       String
+    transaction_id String   @unique
+    status         String
+    raw_response   String?  @db.Text
+    created_at     DateTime @default(now())
+    updated_at     DateTime @updatedAt
+
+    order Orders @relation(fields: [order_id], references: [orderId])
+    user  Users? @relation(fields: [user_id], references: [userId])
+}

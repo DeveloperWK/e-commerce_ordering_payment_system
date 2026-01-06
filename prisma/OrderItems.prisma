@@ -1,0 +1,13 @@
+model OrderItems {
+    orderItemsId String      @id @default(cuid())
+    order_id     String
+    product_id   String
+    quantity     Int
+    price        Float
+    subtotal     Float
+    created_at   DateTime @default(now())
+    updated_at   DateTime @updatedAt
+
+    order   Orders   @relation(fields: [order_id], references: [orderId])
+    product Products @relation(fields: [product_id], references: [productsId])
+}

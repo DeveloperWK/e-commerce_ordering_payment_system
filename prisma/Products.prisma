@@ -1,0 +1,12 @@
+model Products {
+  productsId String      @id @default(cuid())
+  sku        String   @unique
+  price      Float
+  stock      Int
+  status     String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  orderItems        OrderItems[]
+  productCategories ProductCategories[]
+}

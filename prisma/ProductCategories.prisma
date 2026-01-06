@@ -1,0 +1,9 @@
+model ProductCategories {
+    product_id  String
+    category_id String
+
+    product  Products   @relation(fields: [product_id], references: [productsId])
+    category Categories @relation(fields: [category_id], references: [categoryId])
+
+    @@id([product_id, category_id])
+}

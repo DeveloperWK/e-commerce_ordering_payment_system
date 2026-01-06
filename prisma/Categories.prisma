@@ -1,0 +1,9 @@
+model Categories {
+    categoryId String    @id @default(cuid())
+    name       String
+    parent_id  String?
+
+    parent            Categories?         @relation("CategoryHierarchy", fields: [parent_id], references: [categoryId])
+    children          Categories[]        @relation("CategoryHierarchy")
+    productCategories ProductCategories[]
+}
