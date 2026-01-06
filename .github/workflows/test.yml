@@ -45,7 +45,7 @@ jobs:
       - name: Run tests
         run: pnpm test
       - name: Prisma Deploy
-      - run: pnpm prisma migrate deploy
+        run: pnpm prisma migrate deploy
 
 
 
