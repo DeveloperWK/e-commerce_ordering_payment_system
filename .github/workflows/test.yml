@@ -36,7 +36,8 @@ jobs:
           node-version: 25
           cache: pnpm
       - run: pnpm install
-      - run: pnpm db:push
+      - run: pnpm prisma migrate deploy
+      
         env:
           DATABASE_URL: postgresql://test:test@localhost:5432/test_db
       - run: pnpm test
