@@ -1,9 +1,10 @@
 import bcrypt from "bcryptjs";
-import prisma from "../../../shared/config/db.config";
-import type { LogInResponse, LogInUserDTO } from "../auth.type";
-import jwt from "jsonwebtoken";
 import { configDotenv } from "dotenv";
+import jwt from "jsonwebtoken";
+import prisma from "../../../shared/config/db.config";
 import { UnauthorizedError } from "../../../shared/Error/errorClass";
+import type { LogInResponse, LogInUserDTO } from "../auth.type";
+
 configDotenv();
 class AuthService {
 	async findUserByEmail(email: string) {
@@ -22,9 +23,11 @@ class AuthService {
 		email: string;
 		role: string;
 	}): string {
-		const secret = process.env.JWT_SECRET ?? "your-secret-key";
+		const secret = process.env.JWT_SECRET ?? "a-secret-key";
 		if (!secret) {
-			throw new Error("JWT_SECRET is not defined in environment variables");
+			throw new Error(
+				"JWT_SECRET is not defined in environment variables",
+			);
 		}
 		return jwt.sign(payload, secret, { expiresIn: "7D" });
 	}

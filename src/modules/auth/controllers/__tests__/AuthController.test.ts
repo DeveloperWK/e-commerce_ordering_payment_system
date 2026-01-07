@@ -1,10 +1,9 @@
-// src/controllers/__tests__/authController.login.test.ts
-import { Request, Response, NextFunction } from "express";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
+import type { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import AuthService from "../AuthService";
 import AuthController from "../AuthController";
+import AuthService from "../AuthService";
 
 // Mock Prisma
 jest.mock("@prisma/client", () => {
@@ -25,7 +24,7 @@ jest.mock("bcryptjs");
 // Mock jsonwebtoken
 jest.mock("jsonwebtoken");
 
-// Import after mocking
+// Auth Service Unit Tests
 
 describe("AuthService - Login Methods", () => {
 	let authService: AuthService;
@@ -65,7 +64,8 @@ describe("AuthService - Login Methods", () => {
 		it("should return null if user not found", async () => {
 			mockPrisma.users.findUnique.mockResolvedValue(null);
 
-			const result = await authService.findUserByEmail("notfound@test.com");
+			const result =
+				await authService.findUserByEmail("notfound@test.com");
 
 			expect(result).toBeNull();
 		});
@@ -136,7 +136,7 @@ describe("AuthService - Login Methods", () => {
 
 			expect(jwt.sign).toHaveBeenCalledWith(
 				expect.any(Object),
-				"your-secret-key",
+				"a-secret-key",
 				expect.any(Object),
 			);
 		});
@@ -227,6 +227,8 @@ describe("AuthService - Login Methods", () => {
 		});
 	});
 });
+
+// Auth API Tests
 
 describe("AuthController - Login", () => {
 	let authController: AuthController;

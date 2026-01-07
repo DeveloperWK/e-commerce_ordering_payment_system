@@ -1,6 +1,7 @@
-import { Request, Response, NextFunction } from "express";
 import { PrismaClient } from "@prisma/client";
 import bcrypt, { genSalt, hash } from "bcryptjs";
+import { NextFunction, Request, Response } from "express";
+
 jest.mock("@prisma/client", () => {
 	const mockPrismaClient = {
 		users: {
@@ -17,8 +18,10 @@ jest.mock("bcryptjs", () => ({
 	hash: jest.fn(),
 }));
 
-import UserService from "../UserService";
 import UserController from "../UserController";
+import UserService from "../UserService";
+
+// Users Unit Tests
 
 describe("UserService", () => {
 	let userService: UserService;
@@ -30,7 +33,9 @@ describe("UserService", () => {
 	});
 	describe("checkEmailExists", () => {
 		it("should return true if email exists", async () => {
-			mockPrisma.users.findUnique.mockResolvedValue({ email: "test@test.com" });
+			mockPrisma.users.findUnique.mockResolvedValue({
+				email: "test@test.com",
+			});
 			const result = await userService.checkEmailExists("test@test.com");
 			expect(result).toBe(true);
 			expect(mockPrisma.users.findUnique).toHaveBeenCalledWith({
@@ -39,7 +44,9 @@ describe("UserService", () => {
 		});
 		it("should return false if email does not exist", async () => {
 			mockPrisma.users.findUnique.mockResolvedValue(null);
-			const result = await userService.checkEmailExists("nonexistent@test.com");
+			const result = await userService.checkEmailExists(
+				"nonexistent@test.com",
+			);
 			expect(result).toBe(false);
 		});
 	});
@@ -122,7 +129,10 @@ describe("UserService", () => {
 			};
 			(bcrypt.genSalt as jest.Mock).mockResolvedValue("salt");
 			(bcrypt.hash as jest.Mock).mockResolvedValue("hashed_password");
-			mockPrisma.users.create.mockResolvedValue({ ...userData, userId: 1 });
+			mockPrisma.users.create.mockResolvedValue({
+				...userData,
+				userId: 1,
+			});
 			await userService.createUser(userData);
 			expect(mockPrisma.users.create).toHaveBeenCalledWith(
 				expect.objectContaining({
@@ -134,6 +144,9 @@ describe("UserService", () => {
 		});
 	});
 });
+
+// User API Tests
+
 describe("UserController", () => {
 	let userController: UserController;
 	let mockRequest: Partial<Request>;
@@ -233,7 +246,9 @@ describe("UserController", () => {
 			mockRequest.body = validateUser;
 
 			mockPrisma.users.findUnique.mockResolvedValue(null);
-			mockPrisma.users.create.mockRejectedValue(new Error("Database error"));
+			mockPrisma.users.create.mockRejectedValue(
+				new Error("Database error"),
+			);
 
 			await userController.register(
 				mockRequest as Request,
@@ -257,7 +272,11 @@ describe("UserController", () => {
 			});
 		});
 		it("should validate Bangladesh phone number format", () => {
-			const validPhones = ["01712345678", "01812345678", "+8801712345678"];
+			const validPhones = [
+				"01712345678",
+				"01812345678",
+				"+8801712345678",
+			];
 			const invalidPhones = ["12345", "01012345678", "017123456"];
 
 			validPhones.forEach((phone) => {
